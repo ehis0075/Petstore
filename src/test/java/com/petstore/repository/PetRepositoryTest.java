@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -16,15 +17,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Sql(scripts = {"classpath:db\\insert-pet.sql"})
 class PetRepositoryTest {
 
     Logger log = Logger.getLogger(getClass().getName());
 
     @Autowired
     PetRepository petRepository;
+    Pet testPetData;
 
     @BeforeEach
     void setUp() {
+
+        testPetData = petRepository.findById(200).orElse(null);
+        assertThat(testPetData).isNotNull();
+        log.info("Test pet data retrieved from database --> "+ testPetData);
+
     }
 
     @AfterEach
