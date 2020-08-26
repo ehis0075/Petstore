@@ -20,11 +20,27 @@ public class Pet {
     private PetType types;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private PetSex sex;
 
     @Column(nullable = false)
     private Integer age;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "store_pets")
+    private Store petStore;
+
+    public Store getPetStore() {
+        return petStore;
+    }
+
+    public void setPetStore(Store petStore) {
+        this.petStore = petStore;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
 
     private Date birthDate;
 

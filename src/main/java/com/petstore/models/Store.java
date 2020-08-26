@@ -1,6 +1,8 @@
 package com.petstore.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Store {
@@ -22,6 +24,9 @@ public class Store {
     private String state;
 
     private String country;
+
+    @OneToMany(mappedBy = "petStore", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Pet> pets;
 
 
     public Integer getId() {
@@ -76,7 +81,24 @@ public class Store {
         return country;
     }
 
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public void addPet(Pet onepet) {
+
+        if(this.pets == null) {
+            this.pets = new ArrayList<>();
+        }
+
+        this.pets.add(onepet);
     }
 }

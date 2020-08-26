@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +58,50 @@ class PetRepositoryTest {
         pet = petRepository.save(pet);
         log.info("After saving pet object --> "+ pet);
         assertThat(pet.getId()).isNotNull();
+
+    }
+
+    @Test
+    void whenFindAllPetsIsCalled_thenRetrievePetsListTest() {
+
+        List<Pet> allPets = petRepository.findAll();
+        assertThat(allPets.size()).isEqualTo(5);
+        log.info("All pets retrieved from the database --> "+ allPets);
+
+
+    }
+
+
+    void whenPetDetailsIsUpdated_thenUpdateDetails() {
+
+        //update pet name
+        assertThat(testPetData.getName()).isEqualTo("bobby");
+        testPetData.setName("jiran");
+
+        testPetData = petRepository.save(testPetData);
+        assertThat(testPetData.getName()).isEqualTo("jiran");
+    }
+
+    //
+    @Test
+    void whenDeleteIsCalled_thenDeletePetDataTest() {
+
+        List<Pet> allPets = petRepository.findAll();
+        assertThat(allPets).isNotNull();
+        assertThat(allPets.size()).isEqualTo(5);
+
+        Pet savedPet = petRepository.findById(201).orElse(null);
+        assertThat(savedPet).isNotNull();
+        petRepository.deleteById(201);
+
+        Pet deletedPet = petRepository.findById(201).orElse(null);
+        assertThat(deletedPet).isEqualTo(null);
+
+        allPets = petRepository.findAll();
+        assertThat(allPets).isNotNull();
+        assertThat(allPets.size()).isEqualTo(4);
+
+
 
     }
 }
